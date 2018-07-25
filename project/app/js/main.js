@@ -62,7 +62,16 @@ function loadContentNetworkFirst() {
       console.warn(err);
     })
   }).catch(err => { // if we can't connect to the server...
-    console.log('Network requests have failed, this is expected if offline');
+    getLocalEventData()
+    .then(offlineData => {
+      if(!offlineData.length) {
+        messageNoData();
+      } else {
+        messageOffline();
+        updateUI(offlineData);
+      }
+    });
+    //console.log('Network requests have failed, this is expected if offline');
   });
 }
 
@@ -112,6 +121,15 @@ return dbPromise.then(db => {
     throw Error('Events were not added to the store');
   });
 });
+}
+
+function getLocalEventData() {
+  if (!('indexedDB' in window)) {return null;}
+  return dbPromise.then(db => {
+    const tx = db.transaction('events', 'readonly');
+    const store = tx.objectStore('events');
+    return store.getAll();
+  });
 }
 
 
