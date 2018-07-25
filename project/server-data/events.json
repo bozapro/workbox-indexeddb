@@ -89,5 +89,19 @@
     "date": "2018-07-25",
     "city": "Glattbrugg",
     "note": ""
+  },
+  {
+    "id": 1532539926690,
+    "title": "ERNI PWA Event nr2",
+    "date": "2018-07-25",
+    "city": "Zurich",
+    "note": ""
+  },
+  {
+    "id": 1532540719234,
+    "title": "ERNI PWA Event nr3",
+    "date": "2018-07-25",
+    "city": "Oerlikon",
+    "note": "Adding event while offline - step 8"
   }
 ]
