@@ -53,6 +53,14 @@ function loadContentNetworkFirst() {
   getServerData()
   .then(dataFromNetwork => {
     updateUI(dataFromNetwork);
+    saveEventDataLocally(dataFromNetwork)
+    .then(() => {
+      setLastUpdated(new Date());
+      messageDataSaved();
+    }).catch(err => {
+      messageSaveError();
+      console.warn(err);
+    })
   }).catch(err => { // if we can't connect to the server...
     console.log('Network requests have failed, this is expected if offline');
   });
@@ -81,6 +89,7 @@ function addAndPostEvent(e) {
   updateUI([data]);
 
   // TODO - save event data locally
+  saveEventDataLocally([data]);
 
   const headers = new Headers({'Content-Type': 'application/json'});
   const body = JSON.stringify(data);
@@ -90,6 +99,21 @@ function addAndPostEvent(e) {
     body: body
   });
 }
+
+
+function saveEventDataLocally(events) {
+if (!('indexedDB' in window)) {return null;}
+return dbPromise.then(db => {
+  const tx = db.transaction('events', 'readwrite');
+  const store = tx.objectStore('events');
+  return Promise.all(events.map(event => store.put(event)))
+  .catch(() => {
+    tx.abort();
+    throw Error('Events were not added to the store');
+  });
+});
+}
+
 
 /* UI functions */
 
