@@ -19,12 +19,33 @@ const noDataMessage = document.getElementById('no-data');
 const dataSavedMessage = document.getElementById('data-saved');
 const saveErrorMessage = document.getElementById('save-error');
 const addEventButton = document.getElementById('add-event-button');
+const dbPromise = createIndexedDB();
 
 addEventButton.addEventListener('click', addAndPostEvent);
 
 Notification.requestPermission();
 
-// TODO - create indexedDB database
+// register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log(`Service Worker registered! Scope: ${registration.scope}`);
+      })
+      .catch(err => {
+        console.log(`Service Worker registration failed: ${err}`);
+      });
+  });
+}
+
+function createIndexedDB() {
+  if (!('indexedDB' in window)) {return null;}
+  return idb.open('dashboardr', 1, function(upgradeDb) {
+    if (!upgradeDb.objectStoreNames.contains('events')) {
+      const eventsOS = upgradeDb.createObjectStore('events', {keyPath: 'id'});
+    }
+  });
+}
 
 loadContentNetworkFirst();
 

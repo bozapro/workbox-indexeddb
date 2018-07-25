@@ -75,5 +75,19 @@
     "date": "1233-02-23",
     "city": "Mountain View",
     "note": "Hello, World!"
+  },
+  {
+    "id": 1532537238169,
+    "title": "ERNI PWA event",
+    "date": "2018-07-25",
+    "city": "Zürich",
+    "note": "learn new stuff"
+  },
+  {
+    "id": 1532538368223,
+    "title": "ERNI PWA event",
+    "date": "2018-07-25",
+    "city": "Glattbrugg",
+    "note": ""
   }
 ]
